@@ -1,0 +1,46 @@
+name: CI
+
+# This repo exists to be audited. An audit artifact whose own checks are never
+# run is worth nothing, so the same Definition of Done gate the Digest app
+# enforces (TECHSPEC §16b) runs here too: formatting, static analysis, tests.
+# Pinned to the same Flutter version as the consuming app so a green run here
+# means the code actually compiles where it ships.
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Read-only: this workflow never needs to write to the repo.
+permissions:
+  contents: read
+
+jobs:
+  analyze-and-test:
+    name: analyze-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.5
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze (CI gate — must be clean)
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test

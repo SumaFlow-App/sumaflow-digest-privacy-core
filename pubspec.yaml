@@ -3,7 +3,7 @@ description: >-
   Privacy-critical modules of SumaFlow Digest — open-sourced under MIT so the
   on-device, no-cloud privacy contract (PRD §13, TECHSPEC §10) is independently
   verifiable.
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/SumaFlow-App/sumaflow-digest-privacy-core
 # Consumed by the main Digest app (private repo) via a pinned git `ref`, not a
 # path dependency. Separate from sumaflow-minutes-privacy-core by design —

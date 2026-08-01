@@ -10,3 +10,4 @@
 
 export 'src/privacy_asserting_http_overrides.dart';
 export 'src/privacy_manifest_tests.dart';
+export 'src/privacy_source_scan_tests.dart';

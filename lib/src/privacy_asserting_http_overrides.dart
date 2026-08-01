@@ -25,6 +25,16 @@ import 'dart:io';
 /// user-initiated, host-pinned, and disclosed in the privacy whitepaper; it is
 /// exercised by its own tests, not under this override. Inference itself runs
 /// entirely on-device and never reaches here.
+///
+/// Two things it structurally cannot see, so do not read a green run as
+/// covering them:
+///   * Native-layer traffic. [HttpOverrides] governs Dart's [HttpClient] only,
+///     and the model download deliberately lives in the native layer behind a
+///     platform channel. What native code may contact is pinned by review and
+///     by the source scan (privacy_source_scan_tests.dart), not by this class.
+///   * Google Play Billing, which reaches Play through the platform's billing
+///     client rather than a Dart socket. It carries purchase tokens, never user
+///     content — the zero-outbound-content promise holds either way.
 class PrivacyAssertingHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
